@@ -5,7 +5,6 @@ const Square = (props) => {
     <span
       className={`square ${props.occupied ? 'occupied' : 'open'}`}
     >
-      {props.occupied ? 1 : 0}
     </span>
   )}
 
