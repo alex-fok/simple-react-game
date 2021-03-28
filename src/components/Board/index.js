@@ -18,7 +18,6 @@ const Board = (props) => {
         <div
           className="board-row"
           key={`row-${rowIndex}`}
-          
         >
           { row.map((stat, colIndex) => {
               const index = rowIndex * (row.length) + colIndex;
