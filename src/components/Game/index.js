@@ -23,6 +23,11 @@ const Game = () => {
     };
   });
 
+  useEffect(() => {
+    window.addEventListener("keydown", placeBlock);
+    return () => window.removeEventListener("keydown", placeBlock)
+  })
+
   const updateBoard = () => {
     const {position, length, direction} = block;
     const last = position + length;
@@ -43,8 +48,8 @@ const Game = () => {
   }
 
   const placeBlock = event => {
-    if (activeRow.current < 0) return;
-
+    if (activeRow.current < 0 || event.code !== 'Space') return;
+    
     clearInterval(intervalRef);
     activeRow.current = activeRow.current - 1;
     updateBoard();
@@ -54,10 +59,10 @@ const Game = () => {
   }
 
   return (
-      <Board
-        board={board}
-        placeBlock={placeBlock}
-      />
+    <div>
+      <Board board={board} />
+      <h4>Press Space to place block</h4>
+    </div>
   )
 }
 
