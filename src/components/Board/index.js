@@ -4,15 +4,11 @@ import './index.css';
 const Board = (props) => {
   const {board} = props;
 
-  const handleKeyDown = event => {
-    console.log("HI");
-  }
-
   return (
     <div
-      className = "board"
-      tabIndex = "0"
-      onKeyDown = {handleKeyDown}
+      className="board"
+      tabIndex="0"
+      onKeyDown={props.placeBlock}
     >
       {board.map((row, rowIndex) => 
         <div
