@@ -1,0 +1,9 @@
+.board {
+  margin-top: 75px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
