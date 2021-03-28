@@ -5,11 +5,7 @@ const Board = (props) => {
   const {board} = props;
 
   return (
-    <div
-      className="board"
-      tabIndex="0"
-      onKeyDown={props.placeBlock}
-    >
+    <div className="board">
       {board.map((row, rowIndex) => 
         <div
           className="board-row"
