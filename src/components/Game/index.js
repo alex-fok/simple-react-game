@@ -9,9 +9,11 @@ const Game = () => {
   const [boardWidth, boardHeight] = [7, 10];
   const [board, setBoard] = useState(new Array(boardHeight).fill(new Array(boardWidth).fill(0)));
   const [isGameover, endGame] = useState(false);
+  const [score, setScore] = useState(0);
   const block = useRef({ position: 2, length: 3, direction: 1 }).current;
   let activeRow = useRef(boardHeight - 1);
   let intervalRef = useRef();
+  
 
   useEffect(() => {
     // If the game is not over, keep re-rendering
@@ -52,6 +54,7 @@ const Game = () => {
     
     clearInterval(intervalRef);
     activeRow.current = activeRow.current - 1;
+    setScore(score + 1);
     updateBoard();
     
     if (activeRow.current < 0)
@@ -59,8 +62,8 @@ const Game = () => {
   }
 
   return (
-    <div>
-      <Board board={board} />
+    <div className="game">
+      <Board board={board} isGameover={isGameover} score={score}/>
       <h4>Press Space to place block</h4>
     </div>
   )
