@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Board from '../Board';
 import './index.css'
 
@@ -8,29 +8,13 @@ const Game = () => {
   // initialize a width * height board
   const [boardWidth, boardHeight] = [7, 10];
   const [board, setBoard] = useState(new Array(boardHeight).fill(new Array(boardWidth).fill(0)));
-  const [isGameover, endGame] = useState(false);
+  const [isGameover, setGameover] = useState(false);
   const [score, setScore] = useState(0);
   const block = useRef({ position: 2, length: 3, direction: 1 }).current;
   let activeRow = useRef(boardHeight - 1);
   let intervalRef = useRef();
   
-
-  useEffect(() => {
-    // If the game is not over, keep re-rendering
-    if (!isGameover) {
-      intervalRef.current = setInterval(() => {
-        updateBoard();
-      }, REFRESH);
-      return () => clearInterval(intervalRef.current);  
-    };
-  });
-
-  useEffect(() => {
-    window.addEventListener("keydown", placeBlock);
-    return () => window.removeEventListener("keydown", placeBlock)
-  })
-
-  const updateBoard = () => {
+  const updateBoard = useCallback(() => {
     const {position, length, direction} = block;
     const last = position + length;
 
@@ -42,14 +26,13 @@ const Game = () => {
     const chgDir = (direction > 0 && last === boardWidth)  || (direction < 0 && position === 0);
 
     // Update block variable
-    Object.assign(block, {
-      position: position + (chgDir ? direction * -1 : direction),
-      direction: chgDir ? direction * -1 : direction,
-    });
-    setBoard(newBoard);
-  }
+    block.position = position + (chgDir ? direction * -1 : direction);
+    block.direction = chgDir ? direction * -1 : direction;
 
-  const placeBlock = event => {
+    setBoard(newBoard);
+  }, [block, board, boardWidth]);
+
+  const placeBlock = useCallback(event => {
     if (activeRow.current < 0 || event.code !== 'Space') return;
     
     clearInterval(intervalRef);
@@ -58,8 +41,23 @@ const Game = () => {
     updateBoard();
     
     if (activeRow.current < 0)
-      endGame(true);
-  }
+      setGameover(true);
+  }, [score, updateBoard]);
+
+  useEffect(() => {
+    // If the game is not over, keep updating board
+    if (!isGameover) {
+      intervalRef.current = setInterval(() => {
+        updateBoard();
+      }, REFRESH);
+      return () => clearInterval(intervalRef.current);  
+    };
+  }, [isGameover, updateBoard]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", placeBlock);
+    return () => window.removeEventListener("keydown", placeBlock)
+  }, [placeBlock]);
 
   return (
     <div className="game">
