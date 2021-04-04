@@ -1,14 +1,13 @@
 import Square from '../Square';
 import './index.css';
 
-const Board = (props) => {
-  const {board} = props;
+const Board = ({ board, isGameover, score }) => {
 
   return (
     <div className='board'>
-      {board.map((row, rowIndex) => 
+      { board.map((row, rowIndex) => 
         <div
-          className={`board-row ${props.isGameover ? 'blur' : ''}`}
+          className={`board-row ${isGameover ? 'blur' : ''}`}
           key={`row-${rowIndex}`}
         >
           { row.map((stat, colIndex) => {
@@ -19,11 +18,10 @@ const Board = (props) => {
           })}
         </div>
       )}
-      {
-        props.isGameover
+      { isGameover
         ? <div className="overlay">
             <p>GAME OVER</p>
-            <p>Your score is : {props.score}</p>
+            <p>Your score is : {score}</p>
           </div>
         : ""
       }

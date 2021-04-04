@@ -1,9 +1,9 @@
 import './index.css';
 
-const Square = (props) => {
+const Square = ({ occupied }) => {
   return (
     <span
-      className={`square ${props.occupied ? 'occupied' : 'open'}`}
+      className={`square ${occupied ? 'occupied' : 'open'}`}
     >
     </span>
   )}
